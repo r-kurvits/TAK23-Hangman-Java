@@ -1,5 +1,14 @@
 package models;
 
+import models.datastructures.DataScore;
+
+import javax.swing.table.DefaultTableModel;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
 public class Model {
     private final String chooseCategory = "Kõik kategooriad";
     /**
@@ -12,10 +21,30 @@ public class Model {
     private String databaseFile = "hangman_words_ee_test.db";
 
     private String selectedCategory; // Vaikimisi valitud kategooria
+    private String[] cmbCategories;
 
-    public Model() {
+    private String imagesFolder = "images";
+    private List<String> imageFiles = new ArrayList<>();
+
+    private DefaultTableModel dtm;
+    private List<DataScore> dataScores = new ArrayList<>();
+
+    public Model(String dbName) {
+        if (dbName != null ) {
+            this.databaseFile = dbName;
+        }
         new Database(this); // Loome andmebaasi ühenduse
+        readImagesFolder();
         selectedCategory = chooseCategory; // Vaikimisi "Kõik kategooriad"
+    }
+
+    private void readImagesFolder() {
+        File folder = new File(imagesFolder);
+        File[] files = folder.listFiles();
+        for (File file : Objects.requireNonNull(files)) {
+            imageFiles.add(file.getAbsolutePath());
+        }
+        Collections.sort(imageFiles);
     }
 
     /**
@@ -56,5 +85,33 @@ public class Model {
      */
     public void setSelectedCategory(String selectedCategory) {
         this.selectedCategory = selectedCategory;
+    }
+
+    public String[] getCmbCategories() {
+        return cmbCategories;
+    }
+
+    public void setCmbCategories(String[] cmbCategories) {
+        this.cmbCategories = cmbCategories;
+    }
+
+    public List<String> getImageFiles() {
+        return imageFiles;
+    }
+
+    public DefaultTableModel getDtm() {
+        return dtm;
+    }
+
+    public void setDtm(DefaultTableModel dtm) {
+        this.dtm = dtm;
+    }
+
+    public List<DataScore> getDataScores() {
+        return dataScores;
+    }
+
+    public void setDataScores(List<DataScore> dataScores) {
+        this.dataScores = dataScores;
     }
 }
