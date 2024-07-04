@@ -105,7 +105,6 @@ public class GameBoard extends JPanel {
         };
         txtChar.setEnabled(false); // Vaikimisi lahtrisse kirjuta ei saa
         txtChar.setHorizontalAlignment(JTextField.CENTER); // Kirjuta lahtri keskele
-        // TODO siia rida, et tekstikasti saab ainult ühe tähe kirjutada
         txtChar.setDocument(new TextFieldLimit(1));
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -140,7 +139,6 @@ public class GameBoard extends JPanel {
      */
     private void createImagePlace(JPanel components) {
         lblImage = new JLabel();
-        // TODO pildid mällu lugemata, seega võllapuud ei näe vaid värviline pildikast. Asendada temporaryImage() õigega
         ImageIcon imageIcon = new ImageIcon(model.getImageFiles().get(model.getImageFiles().size()-1)); // Sulgude osa täita õigesti ja pilt on maagiliselt näha
         lblImage.setIcon(imageIcon);
 

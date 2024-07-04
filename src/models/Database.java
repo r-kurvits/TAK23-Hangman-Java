@@ -1,5 +1,6 @@
 package models;
 
+import helpers.RealTimer;
 import models.datastructures.DataScore;
 
 import java.sql.*;
@@ -92,5 +93,49 @@ public class Database {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void selectRandomWord() {
+        String selectedCategory = model.getSelectedCategory();
+        String sql;
+        if (selectedCategory.equals("Kõik kategooriad")) {
+            sql = "SELECT word FROM words ORDER BY RANDOM () LIMIT 1;";
+        } else {
+            sql = "SELECT word FROM words WHERE category = '" + selectedCategory.replace("'", "''") + "' ORDER BY RANDOM() LIMIT 1;";
+        }
+        try {
+            Connection connection = this.dbConnection();
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next()) {
+                String word = rs.getString("word");
+                model.setWord(word);
+                model.convertToCorrectCharacters(word);
+            }
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void saveScore(String name, int gameTime) {
+        String sql = "INSERT INTO scores (playertime, playername, guessword, wrongcharacters, gametime) VALUES (?, ?, ?, ?, ?)";
+        String word = model.getWord();
+        String wrongCharacters = model.listToString(model.getWrongCharacters()).toUpperCase();
+        String playerTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        try {
+            Connection connection = this.dbConnection();
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, playerTime);
+            stmt.setString(2, name);
+            stmt.setString(3, word);
+            stmt.setString(4, wrongCharacters);
+            stmt.setInt(5, gameTime);
+            stmt.executeUpdate();
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

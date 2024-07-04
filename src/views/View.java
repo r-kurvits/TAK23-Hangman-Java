@@ -9,6 +9,7 @@ import views.panels.LeaderBoard;
 import views.panels.Settings;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
 
@@ -50,8 +51,7 @@ public class View extends JFrame {
 
         setTitle("Poomismäng 2024 õpilased"); // JFrame titelriba tekst
         setPreferredSize(new Dimension(500, 250));
-        // TODO arenduse lõpus keela akna suurendamine
-        // setResizable(false);
+        setResizable(false);
         getContentPane().setBackground(new Color(250,210,205)); // JFrame taustavärv (rõõsa)
 
         // Loome kolm vahelehte (JPanel)
@@ -76,8 +76,7 @@ public class View extends JFrame {
         tabbedPane.addTab("Mängulaud", gameBoard); // Vaheleht Mängulaud paneeliga gameBoard
         tabbedPane.addTab("Edetabel", leaderBoard); // Vaheleht Mängulaud paneeliga gameBoard
 
-        // TODO arenduse lõpus mängulaua vahelehte klikkida ei saa
-        // tabbedPane.setEnabledAt(1, false); // Vahelehte mängulaud ei saa klikkida
+        tabbedPane.setEnabledAt(1, false); // Vahelehte mängulaud ei saa klikkida
     }
 
     /**
@@ -141,5 +140,20 @@ public class View extends JFrame {
         int min = seconds / 60;
         int sec = seconds % 60;
         return String.format("%02d:%02d", min, sec);
+    }
+
+    public void changeImage(int index) {
+        JLabel currentImage = gameBoard.getLblImage();
+        ImageIcon newImageIcon = new ImageIcon(model.getImageFiles().get(index));
+        currentImage.setIcon(newImageIcon);
+    }
+
+    public String gameWonTab() {
+        return JOptionPane.showInputDialog(null, "Mäng läbi! \nSisesta mängija nimi:", "Mäng läbi", JOptionPane.QUESTION_MESSAGE);
+    }
+
+    public void clearScoresTable() {
+        DefaultTableModel dtm = leaderBoard.getDtm();
+        dtm.setRowCount(0);
     }
 }

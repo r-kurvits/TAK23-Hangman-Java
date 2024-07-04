@@ -61,4 +61,7 @@ public class LeaderBoard extends JPanel {
         }
     }
 
+    public DefaultTableModel getDtm() {
+        return dtm;
+    }
 }

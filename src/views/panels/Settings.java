@@ -86,7 +86,6 @@ public class Settings extends JPanel {
         gbc.gridwidth = 1; // Muuda tagasi üks komponent veergu
         components.add(lblCategory, gbc);
 
-        // TODO muuta JComboBox sulgude sisu
         cmbCategory = new JComboBox<>(model.getCmbCategories()); // Teksti massiiv ühe elemendiga
         gbc.gridx = 1;
         gbc.gridy = 1;

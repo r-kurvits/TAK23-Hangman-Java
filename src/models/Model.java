@@ -4,10 +4,7 @@ import models.datastructures.DataScore;
 
 import javax.swing.table.DefaultTableModel;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Model {
     private final String chooseCategory = "Kõik kategooriad";
@@ -29,6 +26,16 @@ public class Model {
     private DefaultTableModel dtm;
     private List<DataScore> dataScores = new ArrayList<>();
 
+    private String word;
+
+    private List<String> userGuesses = new ArrayList<>();
+
+    private String[] correctCharacters;
+
+    private Integer wrongCount = 0;
+
+    private List<String> wrongCharacters = new ArrayList<>();
+
     public Model(String dbName) {
         if (dbName != null ) {
             this.databaseFile = dbName;
@@ -45,6 +52,21 @@ public class Model {
             imageFiles.add(file.getAbsolutePath());
         }
         Collections.sort(imageFiles);
+    }
+
+    public void convertToCorrectCharacters(String word) {
+        correctCharacters = new String[word.length()];
+        for (int i = 0; i < word.length(); i++) {
+            correctCharacters[i] = "_";
+        }
+    }
+
+    public String arrayToString(String[] array) {
+        return String.join(" ", array);
+    }
+
+    public String listToString(List<String> list) {
+        return String.join(",", list);
     }
 
     /**
@@ -113,5 +135,33 @@ public class Model {
 
     public void setDataScores(List<DataScore> dataScores) {
         this.dataScores = dataScores;
+    }
+
+    public String getWord() {
+        return word;
+    }
+
+    public void setWord(String word) {
+        this.word = word;
+    }
+
+    public String[] getCorrectCharacters() {
+        return correctCharacters;
+    }
+
+    public List<String> getUserGuesses() {
+        return userGuesses;
+    }
+
+    public Integer getWrongCount() {
+        return wrongCount;
+    }
+
+    public void setWrongCount(Integer wrongCount) {
+        this.wrongCount = wrongCount;
+    }
+
+    public List<String> getWrongCharacters() {
+        return wrongCharacters;
     }
 }
