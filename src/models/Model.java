@@ -164,4 +164,13 @@ public class Model {
     public List<String> getWrongCharacters() {
         return wrongCharacters;
     }
+
+    public void setWrongCharacters() {
+        this.wrongCharacters = new ArrayList<>();
+    }
+
+    public void resetGameStats() {
+        this.setWrongCount(0);
+        this.setWrongCharacters();
+    }
 }

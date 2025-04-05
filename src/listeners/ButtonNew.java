@@ -21,6 +21,8 @@ public class ButtonNew implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         view.hideButtons();
         if(!view.getGameTimer().isRunning()) {
+            model.resetGameStats();
+            view.getGameBoard().getLblError().setText("Vigased tähed:" + model.listToString(model.getWrongCharacters()).toUpperCase());
             view.getGameTimer().setSeconds(0);
             view.getGameTimer().setMinutes(0);
             view.getGameTimer().setRunning(true);

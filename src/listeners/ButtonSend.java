@@ -25,7 +25,7 @@ public class ButtonSend implements ActionListener {
         view.getGameBoard().getTxtChar().grabFocus();
         this.checkUserInput(userInput);
         view.getGameBoard().getLblResult().setText(model.arrayToString(model.getCorrectCharacters()).toUpperCase());
-        view.getGameBoard().getLblError().setText(model.listToString(model.getWrongCharacters()).toUpperCase());
+        view.getGameBoard().getLblError().setText("Vigased tähed: " + model.listToString(model.getWrongCharacters()).toUpperCase());
         gameOver();
     }
 
