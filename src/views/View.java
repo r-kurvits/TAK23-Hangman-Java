@@ -12,6 +12,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * See on põhivaade ehk JFrame kuhu peale pannakse kõik muud JComponendid mida on mänguks vaja.
@@ -149,11 +151,39 @@ public class View extends JFrame {
     }
 
     public String gameWonTab() {
-        return JOptionPane.showInputDialog(null, "Mäng läbi! \nSisesta mängija nimi:", "Mäng läbi", JOptionPane.QUESTION_MESSAGE);
+        String name = null;
+        boolean validInput = false;
+
+        while(!validInput) {
+            name = JOptionPane.showInputDialog(null, "Mäng läbi! \nSisesta mängija nimi:", "Mäng läbi", JOptionPane.QUESTION_MESSAGE);
+            if (name == null) {
+                return null;
+            }
+            String trimmedName = name.trim();
+            if (trimmedName.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Palun sisesta nimi!", "Viga sisestuses", JOptionPane.ERROR_MESSAGE);
+            } else {
+                Pattern pattern = Pattern.compile("^[a-zA-ZäöõüÄÖÕÜ]+$");
+                Matcher matcher = pattern.matcher(trimmedName);
+
+                if (!matcher.matches()) {
+                    JOptionPane.showMessageDialog(null, "Vale sisestus! Nime sisestamisel on lubatud sisestada vaid tähti!", "Viga sisestuses", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    validInput = true; // Input is valid, exit the loop
+                }
+            }
+        }
+
+        return name.trim();
+
     }
 
     public void clearScoresTable() {
         DefaultTableModel dtm = leaderBoard.getDtm();
         dtm.setRowCount(0);
+    }
+
+    public void displayMessage(String message) {
+        JOptionPane.showMessageDialog(null, message, "Info", JOptionPane.INFORMATION_MESSAGE);
     }
 }

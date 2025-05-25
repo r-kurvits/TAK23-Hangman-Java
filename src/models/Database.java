@@ -98,24 +98,35 @@ public class Database {
     public void selectRandomWord() {
         String selectedCategory = model.getSelectedCategory();
         String sql;
-        if (selectedCategory.equals("Kõik kategooriad")) {
-            sql = "SELECT word FROM words ORDER BY RANDOM () LIMIT 1;";
-        } else {
-            sql = "SELECT word FROM words WHERE category = '" + selectedCategory.replace("'", "''") + "' ORDER BY RANDOM() LIMIT 1;";
-        }
-        try {
-            Connection connection = this.dbConnection();
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while(rs.next()) {
-                String word = rs.getString("word");
-                model.setWord(word);
-                model.convertToCorrectCharacters(word);
+        try (Connection connection = this.dbConnection()){
+            if (selectedCategory.equals("Kõik kategooriad")) {
+                sql = "SELECT word FROM words ORDER BY RANDOM () LIMIT 1;";
+                try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                        if (rs.next()) {
+                            String word = rs.getString("word");
+                            model.setWord(word);
+                            model.convertToCorrectCharacters(word);
+                        }
+                    }
+                }
+            } else {
+                sql = "SELECT word FROM words WHERE category = ? ORDER BY RANDOM() LIMIT 1;";
+                try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+                    pstmt.setString(1, selectedCategory); // Set the parameter securely
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                        if (rs.next()) {
+                            String word = rs.getString("word");
+                            model.setWord(word);
+                            model.convertToCorrectCharacters(word);
+                        }
+                    }
+                }
             }
-            connection.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Database error during random word selection", e);
         }
+
     }
 
     public void saveScore(String name, int gameTime) {

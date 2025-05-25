@@ -9,6 +9,8 @@ import views.panels.LeaderBoard;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ButtonSend implements ActionListener {
     private Model model;
@@ -30,29 +32,39 @@ public class ButtonSend implements ActionListener {
     }
 
     private void checkUserInput(String text) {
-        if (text != null && !text.isEmpty()) {
-            String word = model.getWord();
-            String guess = text.trim().toLowerCase();
-            String[] correctLetters = model.getCorrectCharacters();
-            List<String> wrongLetters = model.getWrongCharacters();
-            model.getUserGuesses().add(guess);
-            int wrongCount = model.getWrongCount();
-            char[] wordLetters = word.toCharArray();
-            boolean found = false;
+        if (text == null || text.isEmpty()) {
+            view.displayMessage("Palun sisesta täht");
+            return;
+        }
+        String word = model.getWord();
+        String guess = text.trim().toLowerCase();
+        String[] correctLetters = model.getCorrectCharacters();
+        List<String> wrongLetters = model.getWrongCharacters();
+        model.getUserGuesses().add(guess);
+        int wrongCount = model.getWrongCount();
+        char[] wordLetters = word.toCharArray();
+        boolean found = false;
 
-            for (int i = 0; i < wordLetters.length; i++) {
-                if (guess.equals(String.valueOf(wordLetters[i]).toLowerCase())) {
-                    correctLetters[i] = guess;
-                    found = true;
-                }
+        Pattern pattern = Pattern.compile("^[a-zA-ZäöõüÄÖÕÜ]+$");
+        Matcher matcher = pattern.matcher(guess);
+
+        if (!matcher.matches()) {
+            view.displayMessage("Vale sisestus! Lubatud on sisestada vaid tähti!");
+            return;
+        }
+
+        for (int i = 0; i < wordLetters.length; i++) {
+            if (guess.equals(String.valueOf(wordLetters[i]).toLowerCase())) {
+                correctLetters[i] = guess;
+                found = true;
             }
-            if (!found) {
-                wrongCount++;
-                model.setWrongCount(wrongCount);
-                view.changeImage(wrongCount);
-                if (!wrongLetters.contains(guess)) {
-                    wrongLetters.add(guess);
-                }
+        }
+        if (!found) {
+            wrongCount++;
+            model.setWrongCount(wrongCount);
+            view.changeImage(wrongCount);
+            if (!wrongLetters.contains(guess)) {
+                wrongLetters.add(guess);
             }
         }
     }
