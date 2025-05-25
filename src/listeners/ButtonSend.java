@@ -79,9 +79,7 @@ public class ButtonSend implements ActionListener {
         }
         if (word.equals(correctLetters)) {
             gameWon = true;
-            gameOver = true;
         }
-
         if (gameOver) {
             view.showButtons();
             if(view.getGameTimer().isRunning()) {
@@ -89,14 +87,20 @@ public class ButtonSend implements ActionListener {
                 view.getGameTimer().setRunning(false);
                 view.gameOver();
             }
-            if (gameWon) {
-                String name = view.gameWonTab();
-                if (name != null && !name.isEmpty()) {
-                    new Database(model).saveScore(name, view.getGameTimer().getPlayedTimeInSeconds());
-                    new Database(model).selectScores();
-                    view.clearScoresTable();
-                    view.updateScoresTable();
-                }
+
+        }
+        if (gameWon) {
+            view.showButtons();
+            if(view.getGameTimer().isRunning()) {
+                view.getGameTimer().stopTime();
+                view.getGameTimer().setRunning(false);
+            }
+            String name = view.gameWonTab();
+            if (name != null && !name.isEmpty()) {
+                new Database(model).saveScore(name, view.getGameTimer().getPlayedTimeInSeconds());
+                new Database(model).selectScores();
+                view.clearScoresTable();
+                view.updateScoresTable();
             }
         }
     }
