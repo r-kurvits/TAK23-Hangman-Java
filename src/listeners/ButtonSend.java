@@ -87,6 +87,7 @@ public class ButtonSend implements ActionListener {
             if(view.getGameTimer().isRunning()) {
                 view.getGameTimer().stopTime();
                 view.getGameTimer().setRunning(false);
+                view.gameOver();
             }
             if (gameWon) {
                 String name = view.gameWonTab();

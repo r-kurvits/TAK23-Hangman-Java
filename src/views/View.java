@@ -186,4 +186,8 @@ public class View extends JFrame {
     public void displayMessage(String message) {
         JOptionPane.showMessageDialog(null, message, "Info", JOptionPane.INFORMATION_MESSAGE);
     }
+
+    public void gameOver() {
+        JOptionPane.showMessageDialog(null, "Mäng läbi! Kahjuks kaotasid seekord mängu!", "Mäng läbi", JOptionPane.INFORMATION_MESSAGE);
+    }
 }
